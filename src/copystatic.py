@@ -11,7 +11,7 @@ import shutil
 
 def copy_and_clean_public():
     source = "static"
-    destination = "public"
+    destination = "docs"
     #check if "public" exists and delete it
     if os.path.exists(path=destination):
         shutil.rmtree(path=destination)
