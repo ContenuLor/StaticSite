@@ -7,13 +7,13 @@ from pathlib import Path
 # You should generate a page for every markdown file in the content directory and write the results to the public directory.
 # 3. Run the new program and ensure that both pages on the site are generated correctly and you can navigate between them.
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     # 1.1. Crawl every entry in the content directory
     #check all files in the content directory check if they are markdown files
     for item in os.listdir(path=dir_path_content):
         #if item is folder:
         if os.path.isdir(os.path.join(dir_path_content,item)):
-            generate_pages_recursive(os.path.join(dir_path_content,item), template_path, os.path.join(dest_dir_path,item))
+            generate_pages_recursive(os.path.join(dir_path_content,item), template_path, os.path.join(dest_dir_path,item), basepath)
         if item.endswith(".md"):
             from_path = os.path.join(dir_path_content,item)
             
@@ -40,6 +40,10 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
 
             # Replace the {{ Title }} and {{ Content }} placeholders in the template with the HTML and title you generated.
             final_html = template_text.replace("{{ Title }}", title).replace("{{ Content }}", html_string)
+
+            #replacing the href and src attributes in the final_html with the basepath
+            final_html = final_html.replace('href="/', f'href="{basepath}')
+            final_html = final_html.replace('src="/', f'src="{basepath}')
             
             #Checking if the destination directory exists
             if os.path.exists(path=dest_dir_path) == False:
